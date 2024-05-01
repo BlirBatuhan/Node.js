@@ -1,5 +1,9 @@
-const getIndexPage = (req,res) => { res.render('index'); };
+const getIndexPage = (req,res) => { res.render('index', {
+    link: "index"
+}); };
 
-const getAboutPage = (req,res) => { res.render('about'); }; 
+const getAboutPage = (req,res) => { res.render('about',{
+    link: "about"
+}); }; 
 
 export {getAboutPage, getIndexPage};
