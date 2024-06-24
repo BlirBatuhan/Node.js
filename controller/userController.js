@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const createUser = async (req,res) => {
     try {
@@ -26,7 +27,10 @@ const loginUser = async (req,res) => {
 
         if(same){
              // Şifre eşleşiyorsa giriş yapıyoruz.
-            res.status(200).send("you loggeend in")
+            res.status(200).json({
+                user,
+                token: createToken(user._id)
+            })
         }
         else{
             // Şifre eşleşmiyorsa hata döndürüyoruz.
@@ -35,6 +39,12 @@ const loginUser = async (req,res) => {
     } catch (error) {
         res.status(500).json({succeded:false, error});
     }
+};
+
+const createToken = (userId) => {
+    return jwt.sign({userId}, process.env.JWT_SECRET, {
+        expiresIn: "1d"
+    } )
 };
 
 export {createUser,loginUser};
