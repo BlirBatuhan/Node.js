@@ -1,28 +1,36 @@
 import User from "../models/userModel.js";
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-const authenticateToken = async (req,res,next) => {
+const authenticateToken = async (req, res, next) => {
     try {
-        const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
-        if(!token)
-        {
-            return res.status(401).json({
-                succeeded : false,
-                error : "No token available"
-            });
-        }
-    
-        req.user = await User.findById(
-            jwt.verify(token, process.env.JWT_SECRET).userId
-        )
-    
-        next();
-    } catch (error) {
-        res.status(401).json({
-            succeeded : false,
-            error : "Not Authorized"
-        })
-    }
-}
+        // Çerezi al
+        const token = req.cookies.jwt;
 
-export {authenticateToken};
+        if (token) {
+            // Token'ı doğrula
+            jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+                if (err) {
+                    console.log(err.message);
+                    return res.redirect('/login'); // Doğrulama hatasında yönlendirme
+                }
+                
+                // Token geçerli ise kullanıcı bilgilerini isteğe ekle ve devam et
+                req.user = user;
+                next();
+            });
+        } else {
+            // Token bulunamazsa, giriş sayfasına yönlendir
+            res.redirect('/login');
+        }
+    } catch (error) {
+        // Beklenmeyen hataları yönet
+        console.error(error.message);
+        res.status(401).json({
+            succeeded: false,
+            error: "Yetkisiz"
+        });
+    }
+};
+
+export { authenticateToken };
+

@@ -26,11 +26,12 @@ const loginUser = async (req,res) => {
         }
 
         if(same){
-             // Şifre eşleşiyorsa giriş yapıyoruz.
-            res.status(200).json({
-                user,
-                token: createToken(user._id)
-            })
+            const token = createToken(user._id);
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                maxAge: 86400000 // 24 saat
+            });
+            res.redirect('/users/dashboard');
         }
         else{
             // Şifre eşleşmiyorsa hata döndürüyoruz.
@@ -47,4 +48,8 @@ const createToken = (userId) => {
     } )
 };
 
-export {createUser,loginUser};
+const getDashboardPage = (req,res) => { res.render('dashboard',{
+    link: "dashboard"
+}); };
+
+export {createUser,loginUser, getDashboardPage};
