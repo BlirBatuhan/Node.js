@@ -1,22 +1,25 @@
 import mongoose from "mongoose";
 import bcyrpt from "bcrypt";
+import validator from "validator";
 
 const { Schema } = mongoose;
 // kullanıcı modelini oluşturduk
 const userSchema = new Schema({
     userName: {
         type: String,
-        required: true,
-        unique : true,
+        required: [true, 'Username is required'],
+        lowercase: true
     },
     email:{
         type: String,
-        required: true,
-        unique: true
+        required: [true, 'Email is required'],
+        unique: true,
+        validate: [validator.isEmail, 'Email is invalid']
     },
     password:{
         type: String,
-        required: true,
+        required: [true, 'Password is required'],
+        minlength: [8, 'At least eight characters required']
     }
 }
 ,{
