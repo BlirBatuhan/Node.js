@@ -62,8 +62,11 @@ const createToken = (userId) => {
     } )
 };
 
-const getDashboardPage = (req,res) => { res.render('dashboard',{
-    link: "dashboard"
+const getDashboardPage = async (req,res) => {
+  const photos = await User.find({user: res.locals.user._id});
+  res.render('dashboard',{
+    link: "dashboard",
+    photos
 }); };
 
 export {createUser,loginUser, getDashboardPage};

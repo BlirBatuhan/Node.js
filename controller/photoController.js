@@ -1,13 +1,26 @@
 import Photo from "../models/photoModel.js";
 
-const createPhoto = async (req,res) => {
+const createPhoto = async (req, res) => {
+
+    const { name, description } = req.body;
+
+    if (!name || !description) {
+        return res.status(400).send('Name and description are required.');
+    }
+
     try {
-        const photo = await Photo.create(req.body);
-    res.status(201).json({succeded: true, photo});
+        await Photo.create({
+            name,
+            description,
+            user: res.locals.user._id,
+        });
+        res.status(201).redirect('/users/dashboard');
     } catch (error) {
-        res.status(500).json({succeded:false, error});
+        console.error(error); // Hataları daha iyi anlamak için
+        res.status(500).json({ succeeded: false, error });
     }
 };
+
 
 const getAllPhotos = async (req,res) => {
     try{
