@@ -22,8 +22,8 @@ const createPhoto = async (req, res) => {
 
     try {
         await Photo.create({
-            name,
-            description,
+            name: req.body.name,
+            description: req.body.description,
             user: res.locals.user._id,
             url: result.secure_url,
         });
