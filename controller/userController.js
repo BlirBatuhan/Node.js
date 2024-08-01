@@ -70,4 +70,35 @@ const getDashboardPage = async (req,res) => {
     photos
 }); };
 
-export {createUser,loginUser, getDashboardPage};
+const getAllusers = async (req,res) => {
+  try{
+      // --------------------------------- uygulamaya giren kullanıcının  profili gözükmez
+      const users = await User.find({ _id: { $ne: res.locals.user._id}});
+      res.status(200).render("users", {
+      users, 
+      link: "users"
+      });
+  }
+  catch (error) {
+      res.status(500).json({succeded:false, error});
+  }
+  
+}
+
+const getAuser = async (req,res) => {
+  try{
+      const user = await User.findById({_id : req.params.id});
+      const photos = await Photo.find({user: res.locals._id})
+      res.status(200).render('user', { 
+      user, 
+      photos, //Kullanıcının Yüklediği fotolar
+      link: 'users'
+      });
+  }
+  catch (error) {
+      res.status(500).json({succeded:false, error});
+  }
+  
+}
+
+export {createUser,loginUser, getDashboardPage, getAllusers,getAuser};

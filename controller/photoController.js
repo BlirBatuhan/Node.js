@@ -36,22 +36,27 @@ const createPhoto = async (req, res) => {
 };
 
 
-const getAllPhotos = async (req,res) => {
-    try{
-        const photos = await Photo.find({});
+const getAllPhotos = async (req, res) => {
+    try {
+        let photos;
+        if (res.locals.user && res.locals.user._id) {
+            photos = await Photo.find({ user: { $ne: res.locals.user._id } });
+        } else {
+            photos = await Photo.find({});
+        }
+
         res.status(200).render("photos", {
-        photos, 
-        link: "photos"
+            photos,
+            link: "photos"
         });
+    } catch (error) {
+        res.status(500).json({ succeded: false, error });
     }
-    catch (error) {
-        res.status(500).json({succeded:false, error});
-    }
-    
-}
+};
 
 const getAPhoto = async (req,res) => {
     try{
+        //------------------------------------------------------- User modülünü kullanarak referans aldırıp, user propertylerini kullanabiliyoruz.
         const photo = await Photo.findById({_id : req.params.id}).populate('user');
         res.status(200).render('photo', { 
         photo, 

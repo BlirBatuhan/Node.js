@@ -18,7 +18,7 @@
               <div class="titlepage text_align_left">
                 <h2><%= photo.name%></h2>
                 <p><%= photo.description%></p>
-                <a class="read_more" href="about.html">Yükleyen: <%= photo.user.userName %></a>
+                <a class="read_more" href="/users/<%= photo.user._id %>">Yükleyen: <%= photo.user.userName %></a>
               </div>
             </div>
             <div class="col-md-6">
