@@ -67,11 +67,12 @@ const getDashboardPage = async (req,res) => {
   const photos = await Photo.find({user: res.locals.user._id});
   const user = await User.findById({_id: res.locals.user._id}).populate([
     'followers',
-    'following'
+    'followings'
   ]);
   res.render('dashboard',{
     link: "dashboard",
-    photos
+    photos,
+    user
 }); };
 
 const getAllusers = async (req,res) => {
@@ -92,11 +93,17 @@ const getAllusers = async (req,res) => {
 const getAuser = async (req,res) => {
   try{
       const user = await User.findById({_id : req.params.id});
+
+      const inFollowers = user.followers.some((follower) => {
+        return follower.equals(res.locals.user._id);
+      });
+
       const photos = await Photo.find({user: user._id});
       res.status(200).render('user', { 
       user, 
       photos, //Kullanıcının Yüklediği fotolar
-      link: 'users'
+      link: 'users',
+      inFollowers
       });
   }
   catch (error) {
@@ -124,7 +131,7 @@ const follow = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).redirect(`/users/${req.params.id}`);
+    res.status(200).redirect(`back`)
   } catch (error) {
     res.status(500).json({
       succeded: false,
@@ -152,7 +159,7 @@ const unfollow = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).redirect(`/users/${req.params.id}`);
+    res.status(200).redirect(`back`)
   } catch (error) {
     res.status(500).json({
       succeded: false,
