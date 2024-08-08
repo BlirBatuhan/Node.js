@@ -208,6 +208,15 @@ button {
     cursor: pointer;
 }
 
+.fixed-ratio {
+    width: auto;
+    height: 400px; /* Sabit yükseklik ayarla, ihtiyacınıza göre değiştirebilirsiniz */
+    object-fit: cover; /* Resmi alanın tamamını doldurmak için kırp */
+    display: block;
+    margin: 0 auto;
+}
+
+
 .full {
     float: left;
     width: 100%;

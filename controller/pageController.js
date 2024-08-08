@@ -1,9 +1,20 @@
 import nodemailer from 'nodemailer';
+import Photo from '../models/photoModel.js'
+import User from '../models/userModel.js'
 
-const getIndexPage = (req,res) => {
-    console.log("REQUEST USER::" + req.user)
+const getIndexPage = async (req,res) => {
+
+  //-------------------------------- en son yüklediğin fotorağı ilk başta gösterir ve max göstericelek fotoğraf
+  const photos = await Photo.find().sort({ uploadedAt: -1 }).limit(6);
+
+  const numOfusers = await User.countDocuments();
+  const allPhotos = await Photo.countDocuments();
+    
     res.render('index', {
-    link: "index"
+    link: "index",
+    photos,
+    numOfusers,
+    allPhotos
 }); };
 
 const getAboutPage = (req,res) => { res.render('about',{
