@@ -32,7 +32,11 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref : 'User'
         }
-    ]
+    ],
+    profilePhoto: {
+        url: String,
+        image_id: String
+    }
 }
 ,{
     timestamps: true

@@ -18,7 +18,7 @@
                <div class="satteb text_align_center">
                   <p>Your personalized message here...</p>
                   <h3>The point of using </h3>
-                  <i><img src="/images/custo.jpg" alt="#"/></i>
+                  <i><img src="<%= user.profilePhoto.url %>" alt="#"/></i>
                </div>
             </div>
          </div>
@@ -78,7 +78,7 @@
                <div class="col-md-4">
                   <div class="team_box text_align_center">
                      <div class="team_img">
-                       <figure><img src="/images/team1.jpg" alt="#"/></figure>
+                       <figure><img src="<%= follower.profilePhoto.url %>" alt="#"/></figure>
                      </div>
                      <div class="craig">
                        <h3><%= follower.userName %></h3>
@@ -112,7 +112,7 @@
                <div class="col-md-4">
                   <div class="team_box text_align_center">
                      <div class="team_img">
-                       <figure><img src="/images/team1.jpg" alt="#"/></figure>
+                       <figure><img src="<%= following.profilePhoto.url %>" alt="#"/></figure>
                      </div>
                      <div class="craig">
                        <h3><%= following.userName %></h3>

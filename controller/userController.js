@@ -2,30 +2,51 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Photo from "../models/photoModel.js";
+import {v2 as cloudinary} from 'cloudinary';
+import fs from 'fs';
 
 const createUser = async (req, res) => {
-    try {
-      const user = await User.create(req.body);
-      res.status(201).json({ user: user._id });
-    } catch (error) {
-      console.log('ERROR', error);
-  
-      let errors2 = {};
-  
-      if (error.code === 11000) {
-        errors2.email = 'The Email is already registered';
-      }
-  
-      if (error.name === 'ValidationError') {
-        Object.keys(error.errors).forEach((key) => {
-          errors2[key] = error.errors[key].message;
-        });
-      }
-  
-      res.status(400).json(errors2);
-    }
-  };
+  try {
+    const formData = req.body;
+    const file = req.files.profilePic;
 
+    // Cloudinary'e dosyayı yükleyin
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
+      use_filename: true,
+      folder: 'lenslight_tr',
+    });
+
+    // Kullanıcıyı oluşturun
+    const user = await User.create({
+      userName: formData.userName,
+      email: formData.email,
+      password: formData.password,
+      profilePhoto: {   // Profil fotoğrafı URL ve ID'sini kaydet
+        url: result.secure_url,
+        image_id: result.public_id
+      }    // Cloudinary ID'sini kaydedin
+    });
+    fs.unlinkSync(file.tempFilePath);
+    res.status(201).json({ user: user._id });
+
+  } catch (error) {
+    console.log('ERROR', error);
+
+    let errors2 = {};
+
+    if (error.code === 11000) {
+      errors2.email = 'The Email is already registered';
+    }
+
+    if (error.name === 'ValidationError') {
+      Object.keys(error.errors).forEach((key) => {
+        errors2[key] = error.errors[key].message;
+      });
+    }
+
+    res.status(400).json(errors2);
+  }
+};
 const loginUser = async (req,res) => {
     try {
         const {userName,password} = req.body;

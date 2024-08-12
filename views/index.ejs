@@ -36,7 +36,8 @@
                                           <div class="col-md-12">
                                              <div class="cemara">
                                                 <figure>
-                                                   <img src="<%= photos[0].url %>" alt="#" class="img-fluid fixed-ratio" />
+                                                   <% var imageUrl = (photos.length > 0 && photos[0]) ? photos[0].url : '/images/about_img.png'; %>
+                                                   <img src="<%= imageUrl %>" alt="#" class="img-fluid fixed-ratio" />                                                   
                                                 </figure>
                                              </div>
                                           </div>
@@ -53,7 +54,9 @@
                                           <div class="col-md-12">
                                              <div class="cemara">
                                                 <figure>
-                                                   <img src="<%= photos[1].url %>" alt="#" class="img-fluid fixed-ratio" />
+                                                   <% var imageUrl = (photos.length > 0 && photos[1]) ? photos[1].url : '/images/about_img.png'; %>
+                                                   <img src="<%= imageUrl %>" alt="#" class="img-fluid fixed-ratio" />
+
                                                 </figure>
                                              </div>
                                           </div>
@@ -70,7 +73,9 @@
                                           <div class="col-md-12">
                                              <div class="cemara">
                                                 <figure>
-                                                   <img src="<%= photos[2].url %>" alt="#" class="img-fluid fixed-ratio" />
+                                                   <% var imageUrl = (photos.length > 0 && photos[2]) ? photos[2].url : '/images/about_img.png'; %>
+                                                   <img src="<%= imageUrl %>" alt="#" class="img-fluid fixed-ratio" />
+
                                                 </figure>
                                              </div>
                                           </div>

@@ -741,10 +741,13 @@ ul.email li i {
     margin-top: 30px;
     background: #fff;
 }
-.team_img figure {
-    margin: 0;
-
-}
+.team_img figure img {
+    width: 200px; /* Genişliği sabitler */
+    height: 200px; /* Yüksekliği sabitler */
+    object-fit: cover; /* Resmi kaplamasına göre keser, bu sayede resmin orantıları korunur */
+    border-radius: 100%; /* Daire şeklinde yapar */
+    border: 2px solid #ddd; 
+  }
 .craig {
     margin: 0 23px;
     padding: 35px 20px;
@@ -1004,3 +1007,36 @@ ul.social_icon_bottom li a i:hover {
 .inner_page .about {
     padding-top: 80px;
 } 
+
+/* Profil fotoğrafı yükleme alanı için stil ayarları */
+.profile-picture {
+    display: flex; /* Flexbox kullanarak içerikleri hizalar */
+    justify-content: center; /* Yatayda ortalar */
+    align-items: center; /* Dikeyde ortalar */
+    height: 150px; /* Yüksekliği ayarlamak için */
+    border: 2px dashed #ddd; /* Yükleme alanı için görsel bir sınır */
+    margin: 20px auto; /* Yatayda ortalar ve üstten boşluk ekler */
+    width: 300px; /* Yükleme alanının genişliği */
+    position: relative; /* İçeriklerin pozisyonunu ayarlamak için */
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #f6388e; /* Butonun arka plan rengi */
+    color: #fff; /* Butonun yazı rengi */
+    border-radius: 5px; /* Buton köşelerinin yuvarlatılması */
+    font-size: 14px; /* Yazı boyutu */
+    text-align: center; /* Buton içindeki metni ortalar */
+}
+
+.custom-file-upload:hover {
+    background-color: #e02e6b; /* Hover efekti */
+}
+
+#file-upload {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}

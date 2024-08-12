@@ -20,7 +20,8 @@
         </div>
       </div>
       <div class="col-md-8 offset-md-2">
-        <form id="request" class="main_form" action="users/register" method="POST">
+        <!-- enctype="multipart/form-data" eklendi -->
+        <form id="request" class="main_form" action="users/register" method="POST" enctype="multipart/form-data">
           <div class="row">
             <div class="col-md-12">
               <input class="form_control" placeholder="Username" type="text" name="userName">
@@ -40,6 +41,18 @@
             <div class="col-md-12">
               <div style="display: none;" class="alert alert-danger" id="password"></div>
             </div>
+            <div class="profile-picture">
+              <label for="file-upload" class="custom-file-upload">
+                Profil Fotoğrafı Seç
+              </label>
+              <input id="file-upload" class="form_control" type="file" name="profilePic" accept="image/*" required>
+              <img id="preview" src="" alt="Profil Fotoğrafı Önizlemesi" style="display: none; width: 100px; height: 100px; object-fit: cover; margin-top: 10px;">
+            </div>
+            <div class="col-md-12">
+              <div style="display: none;" class="alert alert-danger" id="profilePicError"></div>
+            </div>            
+            
+          
             <div class="col-md-12">
               <div class="group_form">
                 <button class="send_btn">Register</button>
@@ -53,10 +66,36 @@
 </div>
 
 <script>
+  const fileUploadInput = document.getElementById('file-upload');
+  const previewImg = document.getElementById('preview');
+  const customFileLabel = document.querySelector('.custom-file-upload');
+
+  fileUploadInput.addEventListener('change', function() {
+    if (this.files && this.files.length > 0) {
+      const file = this.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewImg.style.display = 'block';
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      previewImg.src = '';
+      previewImg.style.display = 'none';
+      customFileLabel.textContent = 'Profil Fotoğrafı Yükle';
+    }
+  });
+</script>
+
+
+<script>
   const form = document.getElementById('request');
   const emailError = document.getElementById('email');
   const passwordError = document.getElementById('password');
   const usernameError = document.getElementById('userName');
+  const profilePicError = document.getElementById('profilePicError');
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -64,20 +103,26 @@
     emailError.textContent = "";
     passwordError.textContent = "";
     usernameError.textContent = "";
+    profilePicError.textContent = "";
     emailError.style.display = "none";
     passwordError.style.display = "none";
     usernameError.style.display = "none";
+    profilePicError.style.display = "none";
 
-    const email = form.email.value;
-    const password = form.password.value;
-    const username = form.userName.value;
+    const formData = new FormData(form);
+
+    if (!form.profilePic.files.length) {
+      profilePicError.textContent = "Profil fotoğrafı yüklemek zorunludur.";
+      profilePicError.style.display = "block";
+    return;
+  }
+
 
     try {
       const res = await fetch('users/register', {
-    method: "POST",
-    body: JSON.stringify({ email, password, userName: username }), // JSON formatında
-    headers: { "Content-Type": "application/json" }
-  });
+        method: "POST",
+        body: formData
+      });
 
       const data = await res.json();
       console.log('DATA', data);
@@ -108,7 +153,6 @@
     }
   });
 </script>
-
 
       <!-- end contact -->
       <!-- end footer -->
