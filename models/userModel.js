@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcyrpt from "bcrypt";
+import bcyrpt from "bcyrpt";
 import validator from "validator";
 
 const { Schema } = mongoose;

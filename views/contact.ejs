@@ -1,95 +1,115 @@
 <%- include("partials/_header") %>
-   <!-- body -->
-   <body class="main-layout inner_page">
-      <!-- loader  -->
-      <div class="loader_bg">
-         <div class="loader"><img src="images/loading.gif" alt="#"/></div>
-      </div>
-      <!-- end loader -->
-     
-         <!-- header -->
-         <%- include("partials/_menu") %>
-         <!-- end header inner -->
-      <!-- contact -->
-        <div class="contact">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12 ">
-                <div class="titlepage text_align_center">
-                  <h2>Requste A Call Back</h2>
-                </div>
-              </div>
-              <div class="col-md-8 offset-md-2">
-                <form id="request" class="main_form" action="/contact" method="POST">
-
+<!-- body -->
+<body class="main-layout inner_page">
+   <!-- loader  -->
+   <div class="loader_bg">
+      <div class="loader"><img src="images/loading.gif" alt="#"/></div>
+   </div>
+   <!-- end loader -->
+   
+      <!-- header -->
+      <%- include("partials/_menu") %>
+      <!-- end header inner -->
+   <!-- contact -->
+   <div class="contact">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-12">
+               <div class="titlepage text_align_center">
+                  <h2>Request A Call Back</h2>
+               </div>
+            </div>
+            <div class="col-md-8 offset-md-2">
+               <form id="request" class="main_form" action="/contact" method="POST">
                   <div class="col-md-12">
                      <div style="display: none;" class="alert alert-success" id="sendMesagge"></div>
                   </div>
 
                   <div class="row">
-                    <div class="col-md-12">
-                      <input class="form_control" placeholder="Your name" type="text" name="name"> 
-                    </div>
-                    <div class="col-md-12">
-                      <input class="form_control" placeholder="email" type="email" name="email">                          
-                    </div>
-                    <div class="col-md-12">
-                      <input class="form_cont" placeholder="Message" type="type" name="message">
-                    </div>
-                    <div class="col-md-12">
-                      <div class="group_form">
-                        <button class="send_btn">Send</button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      <!-- end contact -->
-      <!-- end footer -->
+                     <div class="col-md-12">
+                        <input class="form_control" placeholder="Your name" type="text" name="name">
+                     </div>
+                     <div class="col-md-12">
+                        <input class="form_control" placeholder="email" type="email" name="email">                          
+                     </div>
+                     <div class="col-md-12">
+                        <input class="form_cont" placeholder="Message" type="type" name="message">
+                     </div>
 
-      <script>
-         const form = document.getElementById('request');
-         const sendMesagge = document.getElementById('sendMesagge');
-       
-         form.addEventListener("submit", async (e) => {
-           e.preventDefault();
-       
+                     <!-- Dropdown Menu -->
+                     <div class="col-md-12">
+                        <label for="dropdown">Select Option</label>
+                        <select name="dropdown_option" class="form_control" id="dropdown">
+                           <option value="option1">Fotoğraf yükleyemiyorum</option>
+                           <option value="option2">başkaların fotoğraflarını görüntüleyemiyorum</option>
+                           <option value="option3">Yüklediğim fotoyu silemiyorum</option>
+                        </select>
+                     </div>
+
+                     <!-- Radio Buttons -->
+                     <div class="col-md-12">
+                        <label><input type="radio" name="callback_preference" value="phone" /> Call me by phone</label><br>
+                        <label><input type="radio" name="callback_preference" value="email" /> Contact me by email</label>
+                     </div>
+
+                     <!-- Checkbox -->
+                     <div class="col-md-12">
+                        <label><input type="checkbox" name="subscribe_newsletter" /> Subscribe to our newsletter</label><br>
+                        <label><input type="checkbox" name="agree_terms" /> I agree to the terms and conditions</label>
+                     </div>
+
+                     <div class="col-md-12">
+                        <div class="group_form">
+                           <button class="send_btn">Send</button>
+                        </div>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- end contact -->
+   <!-- end footer -->
+
+   <script>
+      const form = document.getElementById('request');
+      const sendMesagge = document.getElementById('sendMesagge');
    
-       
-           const name = form.name.value;
-           const email = form.email.value;
-           const message = form.message.value;
-       
-           try {
-             const res = await fetch('/contact', {
-           method: "POST",
-           body: JSON.stringify({ email, name, message}), // JSON formatında
-           headers: { "Content-Type": "application/json" }
-         });
-       
-             const data = await res.json();
-             console.log('DATA', data);
-       
-             if (data.succeeded) {
-              
-               sendMesagge.textContent = 'Your message received succesfuly'
-               sendMesagge.style.display = 'block'
+      form.addEventListener("submit", async (e) => {
+         e.preventDefault();
+   
+         const name = form.name.value;
+         const email = form.email.value;
+         const message = form.message.value;
+         const dropdownOption = form.dropdown_option.value;  // Getting the value of the dropdown
+
+         try {
+            const res = await fetch('/contact', {
+               method: "POST",
+               body: JSON.stringify({ email, name, message, dropdownOption }), // Include the dropdown value
+               headers: { "Content-Type": "application/json" }
+            });
+   
+            const data = await res.json();
+            console.log('DATA', data);
+   
+            if (data.succeeded) {
+               sendMesagge.textContent = 'Your message received successfully';
+               sendMesagge.style.display = 'block';
 
                setTimeout(() => {
-                  sendMesagge.style.display = 'none'
-                  form.name.value = ''
-                  form.email.value = ''
-                  form.message.value = ''
-
-                 }, 3000);
-               }
-           
-           } catch (err) {
-             console.log("ERR::", err);
-           }
-         });
-       </script>
-      <%- include("partials/_footer") %>
+                  sendMesagge.style.display = 'none';
+                  form.name.value = '';
+                  form.email.value = '';
+                  form.message.value = '';
+               }, 3000);
+            }
+         
+         } catch (err) {
+            console.log("ERR::", err);
+         }
+      });
+   </script>
+   <%- include("partials/_footer") %>
+</body>
